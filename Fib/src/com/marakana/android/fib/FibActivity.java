@@ -23,10 +23,16 @@ public class FibActivity extends Activity {
     public void onClick(View v) {
     		long n = Long.parseLong( in.getText().toString() );
     		
+    		// Java recursive
+    		long start = System.currentTimeMillis();
     		long resultJ = FibLib.fibJ(n);
-    		out.append( String.format("\nfib(%d)=%d", n, resultJ) );
+    		long timeJ = System.currentTimeMillis() - start;
+    		out.append( String.format("\nfib(%d)=%d (%d ms)", n, resultJ, timeJ) );
     		
+    		// Native recursive
+    		start = System.currentTimeMillis();
     		long resultN = FibLib.fibN(n);
-    		out.append( String.format("\nfib(%d)=%d", n, resultN) );
+    		long timeN = System.currentTimeMillis() - start;
+    		out.append( String.format("\nfib(%d)=%d (%d ms)", n, resultN, timeN) );
     }
 }
