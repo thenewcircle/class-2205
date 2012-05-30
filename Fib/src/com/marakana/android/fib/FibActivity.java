@@ -27,12 +27,25 @@ public class FibActivity extends Activity {
     		long start = System.currentTimeMillis();
     		long resultJ = FibLib.fibJ(n);
     		long timeJ = System.currentTimeMillis() - start;
-    		out.append( String.format("\nfib(%d)=%d (%d ms)", n, resultJ, timeJ) );
+    		out.append( String.format("\nfibJ(%d)=%d (%d ms)", n, resultJ, timeJ) );
     		
+    		// Java iterative
+    		start = System.nanoTime();
+    		long resultJI = FibLib.fibJI(n);
+    		long timeJI = System.nanoTime() - start;
+    		out.append( String.format("\nfibJI(%d)=%d (%d ns)", n, resultJI, timeJI) );
+
     		// Native recursive
     		start = System.currentTimeMillis();
     		long resultN = FibLib.fibN(n);
     		long timeN = System.currentTimeMillis() - start;
-    		out.append( String.format("\nfib(%d)=%d (%d ms)", n, resultN, timeN) );
+    		out.append( String.format("\nfibN(%d)=%d (%d ms)", n, resultN, timeN) );
+    		
+    		// Native iterative
+    		start = System.nanoTime();
+    		long resultNI = FibLib.fibNI(n);
+    		long timeNI = System.nanoTime() - start;
+    		out.append( String.format("\nfibNI(%d)=%d (%d ns)", n, resultNI, timeNI) );
+
     }
 }
