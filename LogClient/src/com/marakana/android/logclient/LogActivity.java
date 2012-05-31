@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.marakana.android.logcommon.LogMessage;
+
 public class LogActivity extends Activity implements OnClickListener {
 	private static final String TAG = LogActivity.class.getSimpleName();
 	private static final int[] LOG_LEVEL = { Log.VERBOSE, Log.DEBUG, Log.DEBUG,
@@ -42,7 +44,7 @@ public class LogActivity extends Activity implements OnClickListener {
 			int priority = LOG_LEVEL[priorityPosition];
 			String tag = this.tag.getText().toString();
 			String message = this.msg.getText().toString();
-			logManager.log(priority, tag, message);
+			logManager.logit( new LogMessage(priority, tag, message) );
 			this.tag.getText().clear();
 			this.msg.getText().clear();
 			Toast.makeText(this, R.string.log_success, Toast.LENGTH_SHORT)

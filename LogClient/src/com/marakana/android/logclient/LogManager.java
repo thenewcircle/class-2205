@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.marakana.android.logcommon.ILogService;
+import com.marakana.android.logcommon.LogMessage;
 
 public class LogManager {
 	private static final String TAG = LogManager.class.getSimpleName();
@@ -39,5 +40,13 @@ public class LogManager {
 		} catch (RemoteException e) {
 			Log.e(TAG, "Failed to run service.log()", e);
 		} 
+	}
+	
+	public void logit(LogMessage message) {
+		try {
+			service.logit(message);
+		} catch (RemoteException e) {
+			Log.e(TAG, "Failed to run service.logit()", e);
+		}
 	}
 }
