@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.marakana.android.fibcommon.IFibService;
+import com.marakana.android.fibcommon.Request;
+import com.marakana.android.fibcommon.Response;
 
 public class FibActivity extends Activity {
 	static final String TAG = "FibActivity";
@@ -61,16 +63,12 @@ public class FibActivity extends Activity {
 		long n = Long.parseLong(in.getText().toString());
 
 		// Java recursive
-		long start = System.currentTimeMillis();
-		long resultJ = service.fibJ(n);
-		long timeJ = System.currentTimeMillis() - start;
-		out.append(String.format("\nfibJ(%d)=%d (%d ms)", n, resultJ, timeJ));
+		Response resultJ = service.fib( new Request(Request.JAVA_RECURSIVE, n));
+		out.append(String.format("\nfibJ(%d)=%s", n, resultJ));
 
 		// Native recursive
-		start = System.currentTimeMillis();
-		long resultN = service.fibN(n);
-		long timeN = System.currentTimeMillis() - start;
-		out.append(String.format("\nfibN(%d)=%d (%d ms)", n, resultN, timeN));
+		Response resultN = service.fib( new Request(Request.NATIVE_RECURSIVE, n));
+		out.append(String.format("\nfibN(%d)=%s", n, resultN));
 
 		Log.d(TAG, "onClick n="+n);
 	}
