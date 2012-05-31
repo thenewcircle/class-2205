@@ -13,7 +13,7 @@ public class FibService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		service = new IFibServiceImpl();
+		service = new IFibServiceImpl(this);
 	}
 
 

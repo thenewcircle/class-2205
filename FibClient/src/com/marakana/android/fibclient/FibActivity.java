@@ -5,13 +5,16 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.marakana.android.fibcommon.IFibListener;
 import com.marakana.android.fibcommon.IFibService;
 import com.marakana.android.fibcommon.Request;
 import com.marakana.android.fibcommon.Response;
@@ -54,6 +57,26 @@ public class FibActivity extends Activity {
 
 	};
 
+	private static final int MSG_ID = 47;
+	private Handler responseHandler = new Handler()  {
+
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what==MSG_ID) {
+				out.append( "\n"+((Response) msg.obj).toString() );
+			}
+		}
+	};
+	
+	private IFibListener listener = new IFibListener.Stub() {
+		@Override
+		public void onResponse(Response response) throws RemoteException {
+//			out.append(String.format("\nfib()=%s",response));
+			Message msg = responseHandler.obtainMessage(MSG_ID, response);
+			responseHandler.sendMessage(msg);
+		}
+	};
+	
 	/**
 	 * Called when the button is clicked.
 	 * 
@@ -61,14 +84,21 @@ public class FibActivity extends Activity {
 	 */
 	public void onClick(View v) throws RemoteException {
 		long n = Long.parseLong(in.getText().toString());
+		
+		service.asyncFib( new Request(Request.JAVA_RECURSIVE, n), listener);
+		service.asyncFib( new Request(Request.NATIVE_RECURSIVE, n), listener);
+		service.asyncFib( new Request(Request.JAVA_ITERATIVE, n), listener);
+		service.asyncFib( new Request(Request.NATIVE_ITERATIVE, n), listener);
 
-		// Java recursive
-		Response resultJ = service.fib( new Request(Request.JAVA_RECURSIVE, n));
-		out.append(String.format("\nfibJ(%d)=%s", n, resultJ));
+//		// Java recursive
+//		Response resultJ = service.fib( new Request(Request.JAVA_RECURSIVE, n));
+//		out.append(String.format("\nfibJ(%d)=%s", n, resultJ));
+//
+//		// Native recursive
+//		Response resultN = service.fib( new Request(Request.NATIVE_RECURSIVE, n));
+//		out.append(String.format("\nfibN(%d)=%s", n, resultN));
 
-		// Native recursive
-		Response resultN = service.fib( new Request(Request.NATIVE_RECURSIVE, n));
-		out.append(String.format("\nfibN(%d)=%s", n, resultN));
+		out.append("\nrequests submitted");
 
 		Log.d(TAG, "onClick n="+n);
 	}
